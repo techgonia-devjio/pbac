@@ -1,0 +1,7 @@
+.env
+vendor
+.tmp
+.gitmodules
+.docker
+docker-compose.yml
+supervisord.pid

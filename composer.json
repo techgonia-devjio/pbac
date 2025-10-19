@@ -1,8 +1,8 @@
 {
-  "name": "techgonia/pbac-module",
+  "name": "techgonia/pbac",
   "type": "library",
   "version": "1.0.0",
-  "description": "PBAC module for starter kit.",
+  "description": "PBAC (Policy-Based Access Control) module for Laravel applications.",
   "autoload": {
     "psr-4": {
       "Modules\\Pbac\\": "src/",

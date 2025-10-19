@@ -29,7 +29,8 @@ return new class extends Migration
                 ->unsignedBigInteger('resource_id')
                 ->nullable(); //  Null if rule applies to *any* resource of that type...
 
-            $table->string('action');  // e.g., 'view', 'create', 'update', 'delete', 'manage', etc.
+            $table->json('action')
+                ->nullable();  // e.g., 'view', 'create', 'update', 'delete', 'manage', etc.
             $table->enum('effect', ['allow', 'deny'])
                 ->default('allow'); // 'allow' or 'deny'
             $table->json('extras')->nullable(); // JSON object for some other data

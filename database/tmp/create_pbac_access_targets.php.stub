@@ -9,7 +9,7 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('access_targets', function (Blueprint $table) {
+        Schema::create('pbac_access_targets', function (Blueprint $table) {
             $table->id();
             $table->string('type')->unique(); // Class name or identifier of target e.g., 'App\Models\User', 'App\Models\Post', etc.
             $table->text('description')->nullable();
@@ -20,6 +20,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('access_targets');
+        Schema::dropIfExists('pbac_access_targets');
     }
 };

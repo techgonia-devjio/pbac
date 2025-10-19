@@ -143,8 +143,8 @@ class PolicyEvaluatorTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_allows_access_with_a_matching_allow_rule_for_any_target_of_a_type(): void
     {
-        $user1 = PbacUser::factory()->create();
-        $user2 = PbacUser::factory()->create();
+        $user1 = TestUser::factory()->create();
+        $user2 = TestUser::factory()->create();
         $post = DummyPost::create(['title' => 'A Post']);
 
         $rule = PBACAccessControl::factory()
@@ -329,7 +329,9 @@ class PolicyEvaluatorTest extends TestCase
         $user = TestUser::factory()->create();
         $post = DummyPost::create(['title' => 'Inactive Resource Post']);
 
-        $resourceType = PBACAccessResource::factory()->inactive()->create(['type' => DummyPost::class]);
+        // Update the existing resource type to be inactive
+        $resourceType = PBACAccessResource::where('type', DummyPost::class)->first();
+        $resourceType->update(['is_active' => false]);
 
         PBACAccessControl::factory()
             ->allow()
@@ -350,7 +352,9 @@ class PolicyEvaluatorTest extends TestCase
         $user = TestUser::factory()->create();
         $post = DummyPost::create(['title' => 'Inactive Resource Post (Non-Strict)']);
 
-        $resourceType = PBACAccessResource::factory()->inactive()->create(['type' => DummyPost::class]);
+        // Update the existing resource type to be inactive
+        $resourceType = PBACAccessResource::where('type', DummyPost::class)->first();
+        $resourceType->update(['is_active' => false]);
 
         // Rule for ANY resource type
         PBACAccessControl::factory()
@@ -403,7 +407,9 @@ class PolicyEvaluatorTest extends TestCase
         $user = TestUser::factory()->create();
         $post = DummyPost::create(['title' => 'Inactive Target Post']);
 
-        $targetType = PBACAccessTarget::factory()->inactive()->create(['type' => TestUser::class]);
+        // Update the existing target type to be inactive
+        $targetType = PBACAccessTarget::where('type', TestUser::class)->first();
+        $targetType->update(['is_active' => false]);
 
         PBACAccessControl::factory()
             ->allow()
@@ -517,14 +523,16 @@ class PolicyEvaluatorTest extends TestCase
     {
         $user = TestUser::factory()->create();
 
+        // Rule for ANY resource type (null resource type)
         PBACAccessControl::factory()
             ->allow()
             ->forUser($user)
-            ->forResource(DummyPost::class, null)
+            ->forResource(null, null) // Any resource type
             ->withAction('viewAny')
             ->create();
 
         // PolicyEvaluator currently doesn't use context, but the trait passes it.
+        // This should match because the rule applies to any resource type
         $this->assertTrue($user->can('viewAny', ['context' => ['filter' => 'all']]));
     }
 

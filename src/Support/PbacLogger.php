@@ -5,13 +5,13 @@ namespace Modules\Pbac\Support;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 
-class PbacLogger extends Log
+class PbacLogger
 {
 
     public function log($level, $message, $context = [])
     {
         if (Config::get('pbac.logging.enabled')) {
-            $this->channel(Config::get('pbac.logging.channel'))
+            Log::channel(Config::get('pbac.logging.channel'))
                 ->log($level, $message, $context);
         }
     }
@@ -19,7 +19,7 @@ class PbacLogger extends Log
     public function error($message, $context = [])
     {
         if (Config::get('pbac.logging.enabled')) {
-            $this->channel(Config::get('pbac.logging.channel'))
+            Log::channel(Config::get('pbac.logging.channel'))
                 ->error($message, $context);
         }
     }
@@ -27,7 +27,7 @@ class PbacLogger extends Log
     public function warning($message, $context = [])
     {
         if (Config::get('pbac.logging.enabled')) {
-            $this->channel(Config::get('pbac.logging.channel'))
+            Log::channel(Config::get('pbac.logging.channel'))
                 ->warning($message, $context);
         }
     }
@@ -35,7 +35,7 @@ class PbacLogger extends Log
     public function debug($message, $context = [])
     {
         if (Config::get('pbac.logging.enabled')) {
-            $this->channel(Config::get('pbac.logging.channel'))
+            Log::channel(Config::get('pbac.logging.channel'))
                 ->debug($message, $context);
         }
     }
@@ -43,7 +43,7 @@ class PbacLogger extends Log
     public function info($message, $context = [])
     {
         if (Config::get('pbac.logging.enabled')) {
-            $this->channel(Config::get('pbac.logging.channel'))
+            Log::channel(Config::get('pbac.logging.channel'))
                 ->info($message, $context);
         }
 

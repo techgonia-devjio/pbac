@@ -281,7 +281,7 @@ class PolicyEvaluator
                 });
             })
             ->orderBy('priority', 'desc'); // Evaluate higher priority rules first
-        dump($matchingRulesQuery->toRawSql());
+        // dump($matchingRulesQuery->toRawSql());
         $this->logger->debug($matchingRulesQuery->toRawSql());
         $matchingRules = $matchingRulesQuery->get();
 

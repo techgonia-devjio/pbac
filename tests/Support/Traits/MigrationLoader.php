@@ -11,10 +11,19 @@ use Modules\Pbac\Tests\Support\Models\TestUser;
 
 trait MigrationLoader
 {
-    protected string $migrationPath = 'modules/pbac/database/migrations';
+    protected string $migrationPath;
     protected string $extension = '.tmp.php';
     protected Filesystem $fs;
     protected array $convertedMigrationFiles = [];
+
+    protected function getMigrationPath(): string
+    {
+        if (!isset($this->migrationPath)) {
+            // Use absolute path to the package's database/migrations directory
+            $this->migrationPath = __DIR__ . '/../../../database/migrations';
+        }
+        return $this->migrationPath;
+    }
 
     public function setup(): void
     {
@@ -56,17 +65,18 @@ trait MigrationLoader
 
         $this->setupUserTable();
         Artisan::call('migrate', [
-            '--path' => $this->migrationPath,
+            '--path' => $this->getMigrationPath(),
             '--realpath' => true,
         ]);
     }
 
     protected function convertStubToPhp(): void
     {
-        foreach ($this->fs->files($this->migrationPath) as $file) {
+        $migrationPath = $this->getMigrationPath();
+        foreach ($this->fs->files($migrationPath) as $file) {
             if ($file->getExtension() === 'stub') {
                 $source = $file->getPathname();
-                $dest = $this->migrationPath.'/'.$file->getFilenameWithoutExtension().$this->extension;
+                $dest = $migrationPath.'/'.$file->getFilenameWithoutExtension().$this->extension;
                 $this->fs->move($source, $dest);
                 $this->convertedMigrationFiles[] = $dest;
             }

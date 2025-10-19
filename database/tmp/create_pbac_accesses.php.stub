@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignIdFor(\Modules\Pbac\Models\PBACAccessTarget::class, 'pbac_access_target_id')
+                ->nullable()
                 ->constrained()
                 ->onDelete('cascade');
 
@@ -20,6 +21,7 @@ return new class extends Migration
                 ->nullable();
 
             $table->foreignIdFor(\Modules\Pbac\Models\PBACAccessResource::class, 'pbac_access_resource_id')
+                ->nullable()
                 ->constrained()
                 ->onDelete('cascade');
 

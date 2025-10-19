@@ -31,11 +31,24 @@ trait HasPbacAccessControl
             $resource = $arguments;
             $context = null;
         } elseif (is_array($arguments)) {
-            if (isset($arguments[0]) && $arguments[0] instanceof Model) {
+            // Check if array has named keys for 'resource' and/or 'context'
+            if (array_key_exists('resource', $arguments) || array_key_exists('context', $arguments)) {
+                $resource = $arguments['resource'] ?? null;
+                $context = $arguments['context'] ?? null;
+            }
+            // Check if positional array with Model at index 0
+            elseif (isset($arguments[0]) && $arguments[0] instanceof Model) {
                 $resource = $arguments[0];
                 $context = $arguments[1] ?? null;
-            } else {
-                $resource = null; // No specific resource model, array is pure context
+            }
+            // Check if positional array with string (class name) at index 0
+            elseif (isset($arguments[0]) && is_string($arguments[0])) {
+                $resource = $arguments[0];
+                $context = $arguments[1] ?? null;
+            }
+            // Otherwise treat the whole array as context
+            else {
+                $resource = null;
                 $context = $arguments;
             }
         } elseif (is_string($arguments)) {

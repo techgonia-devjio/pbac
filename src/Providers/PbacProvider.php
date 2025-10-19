@@ -3,7 +3,6 @@
 namespace Modules\Pbac\Providers;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Modules\Pbac\Services\PolicyEvaluator;
 use Modules\Pbac\Support\PbacLogger;
@@ -37,9 +36,9 @@ class PbacProvider extends PackageServiceProvider {
 
     public function packageBooted()
     {
-        // The Gate::before check for super admin bypass.
-        // In this version, we check for a boolean attribute on the User model as configured in pbac.php.
-        Gate::before(function ($user, $ability) {
+        // The Gate::before check for PBAC integration.
+        // This integrates PBAC with Laravel's Gate system.
+        Gate::before(function ($user, $ability, $arguments) {
             if (!$user || !in_array(config('pbac.traits.access_control'), class_uses($user))) {
                 return null; // Let Gate continue if user is not logged in or trait is not used
             }
@@ -49,9 +48,13 @@ class PbacProvider extends PackageServiceProvider {
             if ($superAdminAttribute && isset($user->{$superAdminAttribute}) && $user->{$superAdminAttribute}) {
                 return true; // Super admin bypasses all checks
             }
-            // If not a super admin, let Gate proceed to check policies/other Gates,
-            // which will ultimately use the PolicyEvaluator via the user's can() method.
-            return null;
+
+            // For PBAC users, delegate to the user's can() method which uses PolicyEvaluator
+            // Extract the resource from arguments (first element if exists)
+            $resource = !empty($arguments) ? $arguments[0] : null;
+
+            // Call the user's can() method which internally uses PolicyEvaluator
+            return $user->can($ability, $resource) ? true : false;
         });
 
         // Optional: Register a Blade directive for checking PBAC access

@@ -17,6 +17,9 @@ class DummyPost extends \Illuminate\Database\Eloquent\Model
             \Illuminate\Support\Facades\Schema::create('dummy_posts', function ($table) {
                 $table->id();
                 $table->string('title');
+                $table->string('status')->nullable();
+                $table->unsignedBigInteger('user_id')->nullable();
+                $table->boolean('is_featured')->nullable();
             });
         }
     }

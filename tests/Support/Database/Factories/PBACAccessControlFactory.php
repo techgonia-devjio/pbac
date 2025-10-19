@@ -59,9 +59,17 @@ class PBACAccessControlFactory extends Factory
         return $this->forTarget(PBACAccessTeam::class, $team->id);
     }
 
-    public function forTarget(string $targetType, ?int $targetId = null): PBACAccessControlFactory
+    public function forTarget(?string $targetType, ?int $targetId = null): PBACAccessControlFactory
     {
         return $this->state(function (array $attributes) use ($targetType, $targetId) {
+            if ($targetType === null) {
+                // null targetType means applies to ANY target
+                return [
+                    'pbac_access_target_id' => null,
+                    'target_id' => null,
+                ];
+            }
+
             $target = PBACAccessTarget::firstOrCreate(['type' => $targetType]);
             return [
                 'pbac_access_target_id' => $target->id,
@@ -70,9 +78,17 @@ class PBACAccessControlFactory extends Factory
         });
     }
 
-    public function forResource(string $resourceType, ?int $resourceId = null): PBACAccessControlFactory
+    public function forResource(?string $resourceType, ?int $resourceId = null): PBACAccessControlFactory
     {
         return $this->state(function (array $attributes) use ($resourceType, $resourceId) {
+            if ($resourceType === null) {
+                // null resourceType means applies to ANY resource
+                return [
+                    'pbac_access_resource_id' => null,
+                    'resource_id' => null,
+                ];
+            }
+
             $resource = PBACAccessResource::firstOrCreate(['type' => $resourceType]);
             return [
                 'pbac_access_resource_id' => $resource->id,

@@ -39,9 +39,9 @@ php artisan migrate
 ### Add Traits to Your User Model
 
 ```php
-use Modules\Pbac\Traits\HasPbacAccessControl;
-use Modules\Pbac\Traits\HasPbacGroups;
-use Modules\Pbac\Traits\HasPbacTeams;
+use Pbac\Traits\HasPbacAccessControl;
+use Pbac\Traits\HasPbacGroups;
+use Pbac\Traits\HasPbacTeams;
 
 class User extends Authenticatable
 {
@@ -52,7 +52,7 @@ class User extends Authenticatable
 ### Basic Example
 
 ```php
-use Modules\Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessControl;
 
 // Grant permission
 PBACAccessControl::factory()

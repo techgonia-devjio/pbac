@@ -536,6 +536,9 @@ class PolicyEvaluatorTest extends TestCase
         $this->assertTrue($user->can('viewAny', ['context' => ['filter' => 'all']]));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_correctly_determines_targets_for_user_with_groups_and_teams(): void
     {
@@ -548,17 +551,26 @@ class PolicyEvaluatorTest extends TestCase
 
         $reflection = new \ReflectionClass($this->evaluator);
         $method = $reflection->getMethod('determineTargets');
-        $method->setAccessible(true);
+        //$method->setAccessible(true);
+        $targetsByType = $method->invokeArgs($this->evaluator, [$user]);
 
-        [$targetTypeStrings, $targetIds] = $method->invokeArgs($this->evaluator, [$user]);
+        // 1. Assert that the array keys are the correct class names
+        $this->assertArrayHasKey(TestUser::class, $targetsByType);
+        $this->assertArrayHasKey(PBACAccessGroup::class, $targetsByType);
+        $this->assertArrayHasKey(PBACAccessTeam::class, $targetsByType);
 
-        $this->assertContains(TestUser::class, $targetTypeStrings);
-        $this->assertContains(PBACAccessGroup::class, $targetTypeStrings);
-        $this->assertContains(PBACAccessTeam::class, $targetTypeStrings);
-
-        $this->assertContains($user->id, $targetIds);
-        $this->assertContains($group->id, $targetIds);
-        $this->assertContains($team->id, $targetIds);
+        // 2. Assert that each class name's array contains the correct ID
+        $this->assertContains($user->id, $targetsByType[TestUser::class]);
+        $this->assertContains($group->id, $targetsByType[PBACAccessGroup::class]);
+        $this->assertContains($team->id, $targetsByType[PBACAccessTeam::class]);
+        // [$targetTypeStrings, $targetIds] = $method->invokeArgs($this->evaluator, [$user]);
+        // $this->assertContains(TestUser::class, $targetTypeStrings);
+        // $this->assertContains(PBACAccessGroup::class, $targetTypeStrings);
+        // $this->assertContains(PBACAccessTeam::class, $targetTypeStrings);
+        //
+        // $this->assertContains($user->id, $targetIds);
+        // $this->assertContains($group->id, $targetIds);
+        // $this->assertContains($team->id, $targetIds);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -571,35 +583,40 @@ class PolicyEvaluatorTest extends TestCase
         $postResource = PBACAccessResource::firstOrCreate(['type' => DummyPost::class]);
 
         $rule1 = PBACAccessControl::factory()
-            ->allow()
-            ->forTarget(TestUser::class, $user->id)
-            ->forResource(DummyPost::class, $post->id)
-            ->withAction('view')
-            ->withPriority(10)
-            ->create();
+                                  ->allow()
+                                  ->forTarget(TestUser::class, $user->id)
+                                  ->forResource(DummyPost::class, $post->id)
+                                  ->withAction('view')
+                                  ->withPriority(10)
+                                  ->create();
 
         $rule2 = PBACAccessControl::factory()
-            ->deny()
-            ->forTarget(TestUser::class, null) // Any user
-            ->forResource(DummyPost::class, $post->id)
-            ->withAction('view')
-            ->withPriority(5)
-            ->create();
+                                  ->deny()
+                                  ->forTarget(TestUser::class, null) // Any user
+                                  ->forResource(DummyPost::class, $post->id)
+                                  ->withAction('view')
+                                  ->withPriority(5)
+                                  ->create();
 
         $rule3 = PBACAccessControl::factory()
-            ->allow()
-            ->forTarget(PBACAccessGroup::class, null) // Any group
-            ->forResource(DummyPost::class, null) // Any post
-            ->withAction('view')
-            ->withPriority(1)
-            ->create();
+                                  ->allow()
+                                  ->forTarget(PBACAccessGroup::class, null) // Any group
+                                  ->forResource(DummyPost::class, null) // Any post
+                                  ->withAction('view')
+                                  ->withPriority(1)
+                                  ->create();
 
         $reflection = new \ReflectionClass($this->evaluator);
         $method = $reflection->getMethod('queryMatchingRules');
-        $method->setAccessible(true);
 
+        // --- Start of Correction ---
         $targetTypeEntries = PBACAccessTarget::whereIn('type', [TestUser::class])->get();
-        $targetIds = [$user->id];
+
+        // Create the structured array that the method now expects
+        $targetsByType = [
+            TestUser::class => [$user->id],
+        ];
+
         $resourceTypeId = $postResource->id;
         $resourceId = $post->id;
 
@@ -608,13 +625,13 @@ class PolicyEvaluatorTest extends TestCase
             $resourceTypeId,
             $resourceId,
             $targetTypeEntries,
-            $targetIds
+            $targetsByType // Pass the correct structured array
         ]);
 
         $this->assertCount(2, $matchingRules); // Should find rule1 and rule2
-        $this->assertTrue($matchingRules->contains($rule1));
-        $this->assertTrue($matchingRules->contains($rule2));
-        $this->assertFalse($matchingRules->contains($rule3)); // Rule3 doesn't match specific target/resource
+        $this->assertTrue($matchingRules->contains('id', $rule1->id));
+        $this->assertTrue($matchingRules->contains('id', $rule2->id));
+        $this->assertFalse($matchingRules->contains('id', $rule3->id)); // Rule3 doesn't match specific target/resource
         $this->assertEquals($rule1->id, $matchingRules->first()->id); // Check priority order
     }
 
@@ -627,26 +644,31 @@ class PolicyEvaluatorTest extends TestCase
         $anyResource = PBACAccessResource::firstOrCreate(['type' => DummyPost::class]);
 
         $rule1 = PBACAccessControl::factory()
-            ->allow()
-            ->forTarget(TestUser::class, null) // Any user
-            ->forResource(DummyPost::class, null) // Any DummyPost
-            ->withAction('viewAny')
-            ->create();
+                                  ->allow()
+                                  ->forTarget(TestUser::class, null) // Any user
+                                  ->forResource(DummyPost::class, null) // Any DummyPost
+                                  ->withAction('viewAny')
+                                  ->create();
 
         $rule2 = PBACAccessControl::factory()
-            ->deny()
-            ->forTarget(TestUser::class, $user->id) // Specific user
-            ->forResource(DummyPost::class, null) // Any DummyPost
-            ->withAction('viewAny')
-            ->withPriority(10)
-            ->create();
+                                  ->deny()
+                                  ->forTarget(TestUser::class, $user->id) // Specific user
+                                  ->forResource(DummyPost::class, null) // Any DummyPost
+                                  ->withAction('viewAny')
+                                  ->withPriority(10)
+                                  ->create();
 
         $reflection = new \ReflectionClass($this->evaluator);
         $method = $reflection->getMethod('queryMatchingRules');
-        $method->setAccessible(true);
 
+        // --- Start of Correction ---
         $targetTypeEntries = PBACAccessTarget::whereIn('type', [TestUser::class])->get();
-        $targetIds = [$user->id];
+
+        // Create the structured array that the method now expects
+        $targetsByType = [
+            TestUser::class => [$user->id]
+        ];
+
         $resourceTypeId = $anyResource->id;
         $resourceId = null;
 
@@ -655,12 +677,13 @@ class PolicyEvaluatorTest extends TestCase
             $resourceTypeId,
             $resourceId,
             $targetTypeEntries,
-            $targetIds
+            $targetsByType // Pass the correct structured array
         ]);
+        // --- End of Correction ---
 
         $this->assertCount(2, $matchingRules); // Should find rule1 and rule2
-        $this->assertTrue($matchingRules->contains($rule1));
-        $this->assertTrue($matchingRules->contains($rule2));
+        $this->assertTrue($matchingRules->contains('id', $rule1->id));
+        $this->assertTrue($matchingRules->contains('id', $rule2->id));
         $this->assertEquals($rule2->id, $matchingRules->first()->id); // Deny rule has higher priority
     }
 }

@@ -109,7 +109,7 @@ class PolicyEvaluatorConditionsTest extends TestCase
             ]);
 
         // Context with allowed IP
-        $context = ['ip' => '192.168.1.100'];
+        $context = ['ip_address' => '192.168.1.100'];
         $this->assertTrue($this->evaluator->evaluate($user, 'view', $post, $context));
     }
 
@@ -129,7 +129,7 @@ class PolicyEvaluatorConditionsTest extends TestCase
             ]);
 
         // Context with disallowed IP
-        $context = ['ip' => '192.168.1.200'];
+        $context = ['ip_address' => '192.168.1.200'];
         $this->assertFalse($this->evaluator->evaluate($user, 'view', $post, $context));
     }
 
@@ -149,7 +149,7 @@ class PolicyEvaluatorConditionsTest extends TestCase
             ]);
 
         // IP within CIDR range
-        $context = ['ip' => '192.168.1.50'];
+        $context = ['ip_address' => '192.168.1.50'];
         $this->assertTrue($this->evaluator->evaluate($user, 'view', $post, $context));
     }
 
@@ -169,7 +169,7 @@ class PolicyEvaluatorConditionsTest extends TestCase
             ]);
 
         // IP outside CIDR range
-        $context = ['ip' => '192.168.2.50'];
+        $context = ['ip_address' => '192.168.2.50'];
         $this->assertFalse($this->evaluator->evaluate($user, 'view', $post, $context));
     }
 
@@ -252,7 +252,7 @@ class PolicyEvaluatorConditionsTest extends TestCase
             ]);
 
         // Level is sufficient but IP is wrong
-        $context = ['level' => 10, 'ip' => '10.0.0.1'];
+        $context = ['level' => 10, 'ip_address' => '10.0.0.1'];
         $this->assertFalse($this->evaluator->evaluate($user, 'view', $post, $context));
     }
 

@@ -142,7 +142,6 @@ class PolicyEvaluatorIntegrationTest extends TestCase
         $admin->groups()->attach($adminGroup->id);
 
         $post = DummyPost::create(['title' => 'Sensitive Data']);
-
         // Rule: Admins can delete, but only from office IPs
         PBACAccessControl::factory()
             ->allow()
@@ -154,11 +153,11 @@ class PolicyEvaluatorIntegrationTest extends TestCase
             ]);
 
         // From office IP
-        $this->assertTrue($this->evaluator->evaluate($admin, 'delete', $post, ['ip' => '10.0.0.50']));
-        $this->assertTrue($this->evaluator->evaluate($admin, 'delete', $post, ['ip' => '192.168.1.100']));
+        $this->assertTrue($this->evaluator->evaluate($admin, 'delete', $post, ['ip_address' => '10.0.0.50']));
+        $this->assertTrue($this->evaluator->evaluate($admin, 'delete', $post, ['ip_address' => '192.168.1.100']));
 
         // From home/external IP
-        $this->assertFalse($this->evaluator->evaluate($admin, 'delete', $post, ['ip' => '203.0.113.1']));
+        $this->assertFalse($this->evaluator->evaluate($admin, 'delete', $post, ['ip_address' => '203.0.113.1']));
     }
 
     /**

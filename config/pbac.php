@@ -85,6 +85,7 @@ return [
     'logging' => [
         'enabled' => env('PBAC_LOGGING_ENABLED', true),
         'channel' => env('PBAC_LOGGING_CHANNEL', 'stderr'), // Log channel to use (null for default)
+        'level'   => env('LOG_LEVEL', 'warning'), // Add this line
     ]
 
 ];

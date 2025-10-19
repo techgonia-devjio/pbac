@@ -12,7 +12,7 @@ use Modules\Pbac\Models\PBACAccessResource;
 use Modules\Pbac\Support\PbacLogger;
 use Modules\Pbac\Traits\HasPbacAccessControl;
 use Illuminate\Support\Str;
-// No need for phpDocumentor\Reflection\Types\ClassString; if not directly used for type hinting non-existing classes
+
 
 class PolicyEvaluator
 {
@@ -65,7 +65,9 @@ class PolicyEvaluator
         }
 
         // 4. Determine Target Types and IDs for the User
-        [$targetTypeStrings, $targetIds] = $this->determineTargets($user);
+        // MODIFIED: This now returns a structured array mapping type strings to their IDs
+        $targetsByType = $this->determineTargets($user);
+        $targetTypeStrings = array_keys($targetsByType);
 
         // 5. Resolve Target Type IDs and Check Activity
         $targetTypeEntries = $this->resolveTargetTypeEntries($targetTypeStrings, $action, $resourceTypeString, $resourceId);
@@ -78,7 +80,9 @@ class PolicyEvaluator
         }
 
         // 6. Query Matching Rules
-        $matchingRules = $this->queryMatchingRules($action, $resourceTypeId, $resourceId, $targetTypeEntries, $targetIds);
+        // MODIFIED: Pass the new structured targets map and the resolved entries
+        $matchingRules = $this->queryMatchingRules($action, $resourceTypeId, $resourceId, $targetTypeEntries, $targetsByType);
+        // dump($matchingRules); // You can keep this for debugging if you wish
 
         // 7. Evaluate Rules, now passing the context
         return $this->evaluateRules($user, $action, $resourceTypeString, $resourceId, $matchingRules, $context);
@@ -144,59 +148,58 @@ class PolicyEvaluator
     }
 
     /**
-     * Determine all the target types (classes) and IDs for the given user,
-     * including those from related entities via PBAC traits.
+     * Determine all the target types and their corresponding IDs for the given user.
      *
      * @param  Model  $user
-     * @return array [array $targetTypeStrings, array $targetIds]
+     * @return array An associative array mapping target type strings to an array of their IDs.
+     * Example: ['App\Models\User' => [1], 'App\Models\Team' => [5, 10]]
      */
     protected function determineTargets(Model $user): array
     {
-        $targetTypeStrings = [get_class($user)]; // User itself is a target type string
-        $targetIds = [$user->getKey()]; // User's specific ID
+        $targetsByType = [];
+        // The user itself is a target
+        $targetsByType[get_class($user)][] = $user->getKey();
 
-        $userTraits = class_uses($user);
+        $userTraits = class_uses_recursive($user);
         $configuredTraits = Config::get('pbac.traits', []);
 
         foreach ($configuredTraits as $traitName => $traitClass) {
-            // Skip the core access control trait
             if ($traitClass === HasPbacAccessControl::class) {
                 continue;
             }
 
-            // Check if the user model uses this specific target trait
             if (in_array($traitClass, $userTraits)) {
-                // Assume the trait provides a relationship method named after the trait key (pluralized)
                 $relationName = Str::camel(Str::plural($traitName)); // e.g., 'groups', 'teams'
 
                 if (method_exists($user, $relationName)) {
-                    $relatedEntities = $user->{$relationName}; // Get the related groups/teams etc.
+                    $relatedEntities = $user->{$relationName};
 
-                    if ($relatedEntities instanceof Collection) {
-                        if ($relatedEntities->isNotEmpty()) {
-                            // Get the class name of the related model (e.g., PBACAccessGroup::class)
-                            // This gets the class name of the *related model instance*, not the trait.
-                            $relatedModelClass = get_class($relatedEntities->first());
-                            $targetTypeStrings[] = $relatedModelClass;
-                            $targetIds = array_merge($targetIds, $relatedEntities->pluck('id')->toArray());
+                    $entities = $relatedEntities instanceof Model ? new Collection([$relatedEntities]) : $relatedEntities;
+
+                    if ($entities instanceof Collection && $entities->isNotEmpty()) {
+                        $relatedModelClass = get_class($entities->first());
+                        $ids = $entities->pluck('id')->toArray();
+
+                        // Add the IDs to the array for that specific type
+                        if (!isset($targetsByType[$relatedModelClass])) {
+                            $targetsByType[$relatedModelClass] = [];
                         }
-                    } elseif ($relatedEntities instanceof Model) { // Handle single related models (e.g., belongsTo)
-                        $targetTypeStrings[] = get_class($relatedEntities);
-                        $targetIds[] = $relatedEntities->getKey();
+                        $targetsByType[$relatedModelClass] = array_merge($targetsByType[$relatedModelClass], $ids);
                     }
                 } else {
                     $this->logger->warning("PBAC Warning: User model uses trait '{$traitClass}' but is missing the expected relationship method '{$relationName}'.");
-
                 }
             }
         }
 
-        // Ensure unique target type strings and IDs
-        $targetTypeStrings = array_unique($targetTypeStrings);
-        $targetIds = array_unique($targetIds);
+        // Ensure all ID arrays have unique values
+        foreach ($targetsByType as $type => $ids) {
+            $targetsByType[$type] = array_unique($ids);
+        }
 
-        return [$targetTypeStrings, $targetIds];
+        return $targetsByType;
     }
+
 
     /**
      * Resolve target type entries from the database and check if they are active.
@@ -216,8 +219,8 @@ class PolicyEvaluator
         }
 
         $targetTypeEntries = PBACAccessTarget::whereIn('type', $targetTypeStrings)
-            ->where('is_active', true) // Only consider active target types
-            ->get();
+                                             ->where('is_active', true) // Only consider active target types
+                                             ->get();
 
         // Check if all target types identified on the user are actually registered AND active
         foreach ($targetTypeStrings as $typeString) {
@@ -225,7 +228,7 @@ class PolicyEvaluator
             if (!$entryFound) {
                 // If a type is either not registered or not active, and strict rules apply,
                 // then no rules associated with this target type can apply.
-                    $this->logger->warning("PBAC Warning: Target type '{$typeString}' used by user is not registered or is inactive in pbac_access_targets.");
+                $this->logger->warning("PBAC Warning: Target type '{$typeString}' used by user is not registered or is inactive in pbac_access_targets.");
 
                 // If any identified target type is invalid, we return an empty collection
                 // to prevent rules for these invalid types from being matched.
@@ -238,54 +241,59 @@ class PolicyEvaluator
 
 
     /**
-     * Query the database for matching access rules based on the provided criteria.
+     * REWRITTEN: Query the database for matching access rules based on specific (type, id) pairs.
+     * This prevents the ID collision bug.
      *
      * @param string $action
      * @param int|null $resourceTypeId
      * @param int|null $resourceId
-     * @param \Illuminate\Support\Collection $targetTypeEntries
-     * @param array $targetIds
-     * @return \Illuminate\Support\Collection
+     * @param Collection $targetTypeEntries A collection of resolved PBACAccessTarget models.
+     * @param array $targetsByType The structured map of target type strings to their IDs.
+     * @return Collection
      */
-    protected function queryMatchingRules(string $action, ?int $resourceTypeId, ?int $resourceId, Collection $targetTypeEntries, array $targetIds): Collection
+    protected function queryMatchingRules(string $action, ?int $resourceTypeId, ?int $resourceId, Collection $targetTypeEntries, array $targetsByType): Collection
     {
-        $targetTypeIds = $targetTypeEntries->pluck('id')->toArray();
-
         $matchingRulesQuery = PBACAccessControl::query()
             // Action check
-            ->whereJsonContains('action', $action)
-            ->where(function ($query) use ($resourceTypeId, $resourceId) {
-                // Resource Type and ID matching
-                // This covers: specific resource instance, any instance of a specific resource type, or any resource type (if $resourceTypeId is null)
+                                               ->whereJsonContains('action', $action)
+            // Resource matching (this logic was correct and remains the same)
+                                               ->where(function ($query) use ($resourceTypeId, $resourceId) {
                 $query->where(function ($q) use ($resourceTypeId, $resourceId) {
-                    $q->where('pbac_access_resource_id', $resourceTypeId) // Rule is for this specific resource type
-                    ->where(function($subQ) use ($resourceId) {
-                        $subQ->where('resource_id', $resourceId) // Rule is for this specific resource ID
-                        ->orWhereNull('resource_id');       // OR rule is for any resource ID of this type
-                    });
+                    $q->where('pbac_access_resource_id', $resourceTypeId)
+                      ->where(function($subQ) use ($resourceId) {
+                          $subQ->where('resource_id', $resourceId)
+                               ->orWhereNull('resource_id');
+                      });
                 })->orWhere(function ($q) {
-                    $q->whereNull('pbac_access_resource_id'); // Rule applies to *any* resource type
+                    $q->whereNull('pbac_access_resource_id');
                 });
             })
-            ->where(function ($query) use ($targetTypeIds, $targetIds) {
-                // Target Type and ID matching
-                // This covers: specific target instance, any instance of a specific target type, or any target type at all.
-                $query->where(function($q) use ($targetTypeIds, $targetIds) {
-                    $q->whereIn('pbac_access_target_id', $targetTypeIds) // Rule is for one of the user's target types
-                    ->where(function($subQ) use ($targetIds) {
-                        $subQ->whereIn('target_id', $targetIds) // Rule is for one of the user's specific target IDs
-                        ->orWhereNull('target_id');       // OR rule is for any target ID of these types (e.g., any TestUser)
-                    });
-                })->orWhere(function($q) {
-                    $q->whereNull('pbac_access_target_id'); // Rule applies to *any* target type (and thus any target ID)
-                });
+            // Target matching (REWRITTEN LOGIC)
+                                               ->where(function ($query) use ($targetTypeEntries, $targetsByType) {
+                // Loop through each of the user's target types (User, Team, Group, etc.)
+                foreach ($targetsByType as $typeString => $ids) {
+                    // Find the corresponding registered target type entry to get its ID
+                    $targetTypeEntry = $targetTypeEntries->firstWhere('type', $typeString);
+                    if ($targetTypeEntry) {
+                        // For each type, add an OR clause to the query
+                        $query->orWhere(function ($q) use ($targetTypeEntry, $ids) {
+                            $q->where('pbac_access_target_id', $targetTypeEntry->id) // Rule must be for this specific type
+                              ->where(function ($subQ) use ($ids) {
+                                // AND the rule's specific ID must be one of the user's IDs for this type,
+                                // OR the rule can apply to any ID of this type (target_id is NULL)
+                                $subQ->whereIn('target_id', $ids)
+                                     ->orWhereNull('target_id');
+                            });
+                        });
+                    }
+                }
+                // Also include rules that apply to *any* target
+                $query->orWhereNull('pbac_access_target_id');
             })
-            ->orderBy('priority', 'desc'); // Evaluate higher priority rules first
-        // dump($matchingRulesQuery->toRawSql());
-        $this->logger->debug($matchingRulesQuery->toRawSql());
-        $matchingRules = $matchingRulesQuery->get();
+                                               ->orderBy('priority', 'desc');
 
-        return $matchingRules;
+        $this->logger->debug($matchingRulesQuery->toRawSql());
+        return $matchingRulesQuery->get();
     }
 
     /**
@@ -326,8 +334,7 @@ class PolicyEvaluator
         foreach ($allowRules as $rule) {
             // Check if the rule's conditions (from 'extras') are met by the current context.
             if ($this->checkRuleConditions($rule, $user, $action, $resourceTypeString, $resourceId, $context)) {
-                    $this->logger->info("PBAC Allow: User ID {$user->getKey()} allowed action '{$action}' on resource type '{$resourceTypeString}' (ID: {$resourceId}) by rule ID {$rule->id} (Contextual Allow).");
-
+                $this->logger->info("PBAC Allow: User ID {$user->getKey()} allowed action '{$action}' on resource type '{$resourceTypeString}' (ID: {$resourceId}) by rule ID {$rule->id} (Contextual Allow).");
                 return true; // Allow rule applies and its conditions are met
             }
         }
@@ -361,11 +368,13 @@ class PolicyEvaluator
 
         // --- Add your common context-based condition checks here ---
         // These are examples; adapt them to your specific business rules.
-
-        // Example 1: Check for 'min_level' in context
-        if (isset($conditions['min_level']) && isset($context['user_level'])) {
-            if ($context['user_level'] < $conditions['min_level']) {
-                $this->logger->debug("Rule ID {$rule->id} failed 'min_level' condition: user level {$context['user_level']} < required {$conditions['min_level']}.");
+        // Rule 1: Check for 'min_level' in context
+        if (isset($conditions['min_level'])) {
+            if (!isset($context['level'])) {
+                return false;
+            }
+            if ($context['level'] < $conditions['min_level']) {
+                $this->logger->debug("Rule ID {$rule->id} failed 'min_level' condition: level {$context['level']} < required {$conditions['min_level']}.");
                 return false;
             }
         }
@@ -403,7 +412,7 @@ class PolicyEvaluator
                 $resourceModel = app($resourceTypeString)->find($resourceId);
                 if ($resourceModel) {
                     foreach ($requiredAttrs as $attribute => $requiredValue) {
-                        if (!isset($resourceModel->{$attribute}) || $resourceModel->{$attribute} !== $requiredValue) {
+                        if (!isset($resourceModel->{$attribute}) || $resourceModel->{$attribute} != $requiredValue) {
                             $this->logger->debug("Rule ID {$rule->id} failed 'requires_attribute_value' condition for resource {$resourceTypeString}:{$resourceId}. Attribute '{$attribute}' does not match required value.");
                             return false;
                         }
@@ -454,7 +463,7 @@ class PolicyEvaluator
      */
     protected function isIpInCidr(string $ip, string $cidr): bool
     {
-        // For a robust solution, consider using a dedicated IP library like 'php-ip/php-ip'
+        // TODO(in-future): For a robust solution, we should consider using a dedicated IP library like 'php-ip/php-ip'
         // This is a basic implementation suitable for common IPv4 CIDR checks.
         if (!str_contains($cidr, '/')) {
             return $ip === $cidr; // Not a CIDR, just a single IP comparison

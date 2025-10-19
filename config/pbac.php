@@ -55,6 +55,15 @@ return [
         'access_control' => \Modules\Pbac\Traits\HasPbacAccessControl::class
     ],
 
+
+    'condition_handlers' => [
+        'min_level' => \Modules\Pbac\Support\ConditionerHandlers\MinLevelHandler::class,
+        'allowed_ips' => \Modules\Pbac\Support\ConditionerHandlers\AllowedIpsHandler::class,
+        'requires_attribute_value' => \Modules\Pbac\Support\ConditionerHandlers\RequiresAttributeValueHandler::class,
+        // Add your custom condition handlers here, e.g.:
+        // 'is_business_hours' => \App\Pbac\Conditions\BusinessHoursHandler::class,
+    ],
+
     'models' => [
         'access_control' => \Modules\Pbac\Models\PBACAccessControl::class,
         'access_resource' => \Modules\Pbac\Models\PBACAccessResource::class,

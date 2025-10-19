@@ -2,12 +2,10 @@
 .vscode/
 
 
-
 .env
 .env.example
 
 vendor/
-
 .tmp/
 
 .gitmodules

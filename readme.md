@@ -19,18 +19,19 @@ Combines the best of RBAC (Role-Based), ABAC (Attribute-Based), and ACL (Access 
 
 ## 📋 Requirements
 
-- PHP 8.1+
-- Laravel 11.0+
+- PHP 8.1 or higher
+- Laravel 11.0 or 12.0
 - Database: MySQL 8.0+, PostgreSQL 12+, or SQLite 3.35+
 
 ## Quick Start
 
 ```bash
 # Install via Composer
-composer require modules/pbac
+composer require techgonia/pbac
 
 # Publish configuration and migrations
-php artisan pbac:install
+php artisan vendor:publish --tag="pbac-config"
+php artisan vendor:publish --tag="pbac-migrations"
 
 # Run migrations
 php artisan migrate

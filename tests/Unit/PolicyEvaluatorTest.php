@@ -1,26 +1,26 @@
 <?php
 
-namespace Modules\Pbac\Tests\Unit;
+namespace Pbac\Tests\Unit;
 
 use Illuminate\Support\Facades\Config;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessTeam;
-use Modules\Pbac\Services\PolicyEvaluator;
-use Modules\Pbac\Tests\Support\Database\Factories\TestUserFactory;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\PbacAccessControlUser;
-use Modules\Pbac\Tests\Support\Models\PbacUser;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\TestCase;
-use Modules\Pbac\Traits\HasPbacAccessControl;
-use Modules\Pbac\Traits\HasPbacGroups;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessTeam;
+use Pbac\Services\PolicyEvaluator;
+use Pbac\Tests\Support\Database\Factories\TestUserFactory;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\PbacAccessControlUser;
+use Pbac\Tests\Support\Models\PbacUser;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\TestCase;
+use Pbac\Traits\HasPbacAccessControl;
+use Pbac\Traits\HasPbacGroups;
 
 class PolicyEvaluatorTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
     protected PolicyEvaluator $evaluator;
 
     protected function setUp(): void

@@ -1,17 +1,17 @@
 <?php
 
-namespace Modules\Pbac\Tests\Integration;
+namespace Pbac\Tests\Integration;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
-use Modules\Pbac\Services\PbacService;
-use Modules\Pbac\Services\PolicyEvaluator;
-use Modules\Pbac\Support\PbacLogger;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Services\PbacService;
+use Pbac\Services\PolicyEvaluator;
+use Pbac\Support\PbacLogger;
+use Pbac\Tests\TestCase;
 
 class ServiceProviderIntegrationTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     protected function setUp(): void
     {
@@ -77,7 +77,7 @@ class ServiceProviderIntegrationTest extends TestCase
 
         // Check specific config values that should be set in tests
         $this->assertEquals(
-            \Modules\Pbac\Tests\Support\Models\TestUser::class,
+            \Pbac\Tests\Support\Models\TestUser::class,
             Config::get('pbac.user_model')
         );
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Models;
+namespace Pbac\Tests\Support\Models;
 
 
 

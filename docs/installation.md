@@ -29,9 +29,9 @@ php artisan migrate
 ### 4. Add Traits to User Model
 
 ```php
-use Modules\Pbac\Traits\HasPbacAccessControl;
-use Modules\Pbac\Traits\HasPbacGroups;
-use Modules\Pbac\Traits\HasPbacTeams;
+use Pbac\Traits\HasPbacAccessControl;
+use Pbac\Traits\HasPbacGroups;
+use Pbac\Traits\HasPbacTeams;
 
 class User extends Authenticatable
 {

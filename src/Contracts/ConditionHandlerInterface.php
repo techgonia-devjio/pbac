@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Pbac\Contracts;
+namespace Pbac\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessControl;
 
 
 interface ConditionHandlerInterface

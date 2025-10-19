@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Models;
+namespace Pbac\Tests\Support\Models;
 
 
 
 class PbacTeamAndAccessControlUser extends TestUser {
-    use \Modules\Pbac\Traits\HasPbacTeams;
-    use \Modules\Pbac\Traits\HasPbacAccessControl;
+    use \Pbac\Traits\HasPbacTeams;
+    use \Pbac\Traits\HasPbacAccessControl;
 }

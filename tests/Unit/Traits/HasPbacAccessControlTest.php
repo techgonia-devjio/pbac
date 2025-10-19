@@ -1,18 +1,18 @@
 <?php
 
-namespace Modules\Pbac\Tests\Unit\Traits;
+namespace Pbac\Tests\Unit\Traits;
 
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Tests\Support\Models\PbacAccessControlUser;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Tests\Support\Models\PbacAccessControlUser;
+use Pbac\Tests\TestCase;
 
 class HasPbacAccessControlTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
-    use \Modules\Pbac\Tests\Support\Traits\TestUsersWithTraits;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\TestUsersWithTraits;
 
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_give_any_access_to_super_admin(): void

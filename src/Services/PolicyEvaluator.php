@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\Pbac\Services;
+namespace Pbac\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use Modules\Pbac\Contracts\ConditionHandlerInterface;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Support\PbacLogger;
-use Modules\Pbac\Traits\HasPbacAccessControl;
+use Pbac\Contracts\ConditionHandlerInterface;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Support\PbacLogger;
+use Pbac\Traits\HasPbacAccessControl;
 use Illuminate\Support\Str;
 
 class PolicyEvaluator

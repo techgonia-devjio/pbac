@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Pbac\Traits;
+namespace Pbac\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
-use Modules\Pbac\Services\PolicyEvaluator; // Import the service
+use Pbac\Services\PolicyEvaluator; // Import the service
 
 
 trait HasPbacAccessControl

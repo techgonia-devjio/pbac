@@ -1,19 +1,19 @@
 <?php
 
-namespace Modules\Pbac\Tests\Integration;
+namespace Pbac\Tests\Integration;
 
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessTeam;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessTeam;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\TestCase;
 
 class DatabaseIntegrationTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     protected function setUp(): void
     {

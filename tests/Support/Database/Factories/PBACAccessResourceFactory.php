@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Database\Factories;
+namespace Pbac\Tests\Support\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\DummyResourceA;
-use Modules\Pbac\Tests\Support\Models\DummyResourceB;
-use Modules\Pbac\Tests\Support\Models\DummyResourceC;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\DummyResourceA;
+use Pbac\Tests\Support\Models\DummyResourceB;
+use Pbac\Tests\Support\Models\DummyResourceC;
 
 class PBACAccessResourceFactory extends Factory
 {
@@ -22,7 +22,7 @@ class PBACAccessResourceFactory extends Factory
         $className = 'DynamicModel_' . $this->faker->unique()->word();
 
         // Define the namespace for the dynamic class
-        $namespace = 'Modules\Pbac\Tests\Support\Models'; // No trailing backslash here
+        $namespace = 'Pbac\Tests\Support\Models'; // No trailing backslash here
 
         // Full qualified class name
         $fullClassName = $namespace . '\\' . $className;

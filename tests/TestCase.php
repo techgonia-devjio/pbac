@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Pbac\Tests;
+namespace Pbac\Tests;
 
 use Illuminate\Support\Facades\Config;
-use Modules\Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\Support\Models\TestUser;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Modules\Pbac\Providers\PbacProvider::class,
+            \Pbac\Providers\PbacProvider::class,
         ];
     }
 

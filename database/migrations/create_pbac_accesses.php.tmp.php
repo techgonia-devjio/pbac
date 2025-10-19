@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('pbac_accesses', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignIdFor(\Modules\Pbac\Models\PBACAccessTarget::class, 'pbac_access_target_id')
+            $table->foreignIdFor(\Pbac\Models\PBACAccessTarget::class, 'pbac_access_target_id')
                 ->nullable()
                 ->constrained()
                 ->onDelete('cascade');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('target_id')
                 ->nullable();
 
-            $table->foreignIdFor(\Modules\Pbac\Models\PBACAccessResource::class, 'pbac_access_resource_id')
+            $table->foreignIdFor(\Pbac\Models\PBACAccessResource::class, 'pbac_access_resource_id')
                 ->nullable()
                 ->constrained()
                 ->onDelete('cascade');

@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Database\Factories;
+namespace Pbac\Tests\Support\Database\Factories;
 
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessTeam;
-use Modules\Pbac\Tests\Support\Models\TestUser;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessTeam;
+use Pbac\Tests\Support\Models\TestUser;
 
 class PBACAccessControlFactory extends Factory
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Pbac\Traits;
+namespace Pbac\Traits;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Team;
-use Modules\Pbac\Models\PBACAccessTeam;
+use Pbac\Models\PBACAccessTeam;
 
 // Assuming your Team model is in App\Models
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Pbac\Tests\Unit\Models;
+namespace Pbac\Tests\Unit\Models;
 
 
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Tests\Support\Traits\MigrationLoader;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Tests\Support\Traits\MigrationLoader;
+use Pbac\Tests\TestCase;
 
 class PBACAccessResourceTest extends TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Traits;
+namespace Pbac\Tests\Support\Traits;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
-use Modules\Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\Support\Models\TestUser;
 
 trait MigrationLoader
 {
@@ -42,14 +42,14 @@ trait MigrationLoader
     private function setupMigrationFactory()
     {
         Factory::guessFactoryNamesUsing(function (string $modelName) {
-            if (str_starts_with($modelName, 'Modules\\Pbac\\Models\\')) {
-                // Modules\Pbac\Tests\Support\Database\Factories
-                return 'Modules\\Pbac\\Tests\\Support\\Database\\Factories\\'.class_basename($modelName).'Factory';
+            if (str_starts_with($modelName, 'Pbac\\Models\\')) {
+                // Pbac\Tests\Support\Database\Factories
+                return 'Pbac\\Tests\\Support\\Database\\Factories\\'.class_basename($modelName).'Factory';
             }
             // For the dummy TestUser model
             if ($modelName === TestUser::class || is_subclass_of($modelName, TestUser::class)) {
                 $name = class_basename($modelName);
-                return 'Modules\\Pbac\\Tests\\Support\\Database\\Factories\\'.$name.'Factory';
+                return 'Pbac\\Tests\\Support\\Database\\Factories\\'.$name.'Factory';
             }
             // Fallback to Laravel's default convention if needed
             return 'Database\\Factories\\'.class_basename($modelName).'Factory';

@@ -14,7 +14,7 @@
 ### Grant Permission to a User
 
 ```php
-use Modules\Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessControl;
 use App\Models\Post;
 
 // Allow a user to view a specific post
@@ -135,7 +135,7 @@ if (Gate::none(['edit', 'delete'], $post)) {
 ### Create a Group
 
 ```php
-use Modules\Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessGroup;
 
 $editors = PBACAccessGroup::create([
     'name' => 'Editors',
@@ -195,7 +195,7 @@ $user->groups()->detach();
 ### Create a Team
 
 ```php
-use Modules\Pbac\Models\PBACAccessTeam;
+use Pbac\Models\PBACAccessTeam;
 
 $devTeam = PBACAccessTeam::create([
     'name' => 'Development Team',

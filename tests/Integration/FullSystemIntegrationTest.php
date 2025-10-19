@@ -1,18 +1,18 @@
 <?php
 
-namespace Modules\Pbac\Tests\Integration;
+namespace Pbac\Tests\Integration;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessTeam;
-use Modules\Pbac\Services\PolicyEvaluator;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessTeam;
+use Pbac\Services\PolicyEvaluator;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\TestCase;
 
 /**
  * Full System Integration Tests
@@ -27,7 +27,7 @@ use Modules\Pbac\Tests\TestCase;
  */
 class FullSystemIntegrationTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     protected function setUp(): void
     {
@@ -450,8 +450,8 @@ class FullSystemIntegrationTest extends TestCase
     {
         // Verify service provider registered services
         $this->assertTrue($this->app->bound(PolicyEvaluator::class), 'PolicyEvaluator should be bound');
-        $this->assertTrue($this->app->bound(\Modules\Pbac\Support\PbacLogger::class), 'PbacLogger should be bound');
-        $this->assertTrue($this->app->bound(\Modules\Pbac\Services\PbacService::class), 'PbacService should be bound');
+        $this->assertTrue($this->app->bound(\Pbac\Support\PbacLogger::class), 'PbacLogger should be bound');
+        $this->assertTrue($this->app->bound(\Pbac\Services\PbacService::class), 'PbacService should be bound');
 
         // Verify singletons
         $evaluator1 = app(PolicyEvaluator::class);
@@ -467,7 +467,7 @@ class FullSystemIntegrationTest extends TestCase
 
         // Verify trait configs
         $this->assertEquals(
-            \Modules\Pbac\Traits\HasPbacAccessControl::class,
+            \Pbac\Traits\HasPbacAccessControl::class,
             Config::get('pbac.traits.access_control'),
             'Access control trait should be configured'
         );

@@ -136,7 +136,7 @@ resource_id: null (GLOBAL rule)
 Before using a resource in PBAC, register it:
 
 ```php
-use Modules\Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessResource;
 
 PBACAccessResource::create([
     'type' => Post::class,

@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Pbac\Services;
+namespace Pbac\Services;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Traits\HasPbacAccessControl;
-use Modules\Pbac\Traits\HasPbacGroups;
-use Modules\Pbac\Traits\HasPbacTeams;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Traits\HasPbacAccessControl;
+use Pbac\Traits\HasPbacGroups;
+use Pbac\Traits\HasPbacTeams;
 
 class PbacService
 {

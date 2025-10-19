@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Database\Factories;
+namespace Pbac\Tests\Support\Database\Factories;
 
 
-use Modules\Pbac\Tests\Support\Models\PbacGroupUser;
+use Pbac\Tests\Support\Models\PbacGroupUser;
 
 class PbacGroupUserFactory extends TestUserFactory
 {

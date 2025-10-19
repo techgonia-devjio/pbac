@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Models;
+namespace Pbac\Tests\Support\Models;
 
 
 // Define a dummy Post model for resource/target instance tests

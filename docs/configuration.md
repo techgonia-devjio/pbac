@@ -154,9 +154,9 @@ Controls how PBAC handles target types (users, groups, teams) that aren't regist
 
 ```php
 'traits' => [
-    'groups' => \Modules\Pbac\Traits\HasPbacGroups::class,
-    'teams' => \Modules\Pbac\Traits\HasPbacTeams::class,
-    'access_control' => \Modules\Pbac\Traits\HasPbacAccessControl::class
+    'groups' => \Pbac\Traits\HasPbacGroups::class,
+    'teams' => \Pbac\Traits\HasPbacTeams::class,
+    'access_control' => \Pbac\Traits\HasPbacAccessControl::class
 ],
 ```
 
@@ -178,9 +178,9 @@ Defines which traits provide PBAC functionality. These are used by the User mode
 
 ```php
 // In your User model
-use Modules\Pbac\Traits\HasPbacAccessControl;
-use Modules\Pbac\Traits\HasPbacGroups;
-use Modules\Pbac\Traits\HasPbacTeams;
+use Pbac\Traits\HasPbacAccessControl;
+use Pbac\Traits\HasPbacGroups;
+use Pbac\Traits\HasPbacTeams;
 
 class User extends Authenticatable
 {
@@ -198,9 +198,9 @@ class User extends Authenticatable
 
 ```php
 'condition_handlers' => [
-    'min_level' => \Modules\Pbac\Support\ConditionerHandlers\MinLevelHandler::class,
-    'allowed_ips' => \Modules\Pbac\Support\ConditionerHandlers\AllowedIpsHandler::class,
-    'requires_attribute_value' => \Modules\Pbac\Support\ConditionerHandlers\RequiresAttributeValueHandler::class,
+    'min_level' => \Pbac\Support\ConditionerHandlers\MinLevelHandler::class,
+    'allowed_ips' => \Pbac\Support\ConditionerHandlers\AllowedIpsHandler::class,
+    'requires_attribute_value' => \Pbac\Support\ConditionerHandlers\RequiresAttributeValueHandler::class,
 ],
 ```
 
@@ -283,7 +283,7 @@ $user->can('edit', $otherPost); // false (user_id doesn't match)
 ```php
 namespace App\Pbac\Conditions;
 
-use Modules\Pbac\Contracts\ConditionHandlerInterface;
+use Pbac\Contracts\ConditionHandlerInterface;
 
 class BusinessHoursHandler implements ConditionHandlerInterface
 {
@@ -325,11 +325,11 @@ PBACAccessControl::factory()
 
 ```php
 'models' => [
-    'access_control' => \Modules\Pbac\Models\PBACAccessControl::class,
-    'access_resource' => \Modules\Pbac\Models\PBACAccessResource::class,
-    'access_target' => \Modules\Pbac\Models\PBACAccessTarget::class,
-    'access_group' => \Modules\Pbac\Models\PBACAccessGroup::class,
-    'access_team' => \Modules\Pbac\Models\PBACAccessTeam::class,
+    'access_control' => \Pbac\Models\PBACAccessControl::class,
+    'access_resource' => \Pbac\Models\PBACAccessResource::class,
+    'access_target' => \Pbac\Models\PBACAccessTarget::class,
+    'access_group' => \Pbac\Models\PBACAccessGroup::class,
+    'access_team' => \Pbac\Models\PBACAccessTeam::class,
 ],
 ```
 
@@ -344,7 +344,7 @@ Defines which Eloquent models represent PBAC entities. This allows you to extend
 ```php
 namespace App\Models;
 
-use Modules\Pbac\Models\PBACAccessControl as BasePBACAccessControl;
+use Pbac\Models\PBACAccessControl as BasePBACAccessControl;
 
 class PBACAccessControl extends BasePBACAccessControl
 {

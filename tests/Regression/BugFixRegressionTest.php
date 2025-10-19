@@ -1,17 +1,17 @@
 <?php
 
-namespace Modules\Pbac\Tests\Regression;
+namespace Pbac\Tests\Regression;
 
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessTeam;
-use Modules\Pbac\Services\PolicyEvaluator;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\PlainUser;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessTeam;
+use Pbac\Services\PolicyEvaluator;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\PlainUser;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\TestCase;
 
 /**
  * Regression tests for previously fixed bugs.
@@ -22,7 +22,7 @@ use Modules\Pbac\Tests\TestCase;
  */
 class BugFixRegressionTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     protected PolicyEvaluator $evaluator;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pbac\Models;
+namespace Pbac\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

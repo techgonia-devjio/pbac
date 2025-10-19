@@ -5,13 +5,13 @@
   "description": "PBAC (Policy-Based Access Control) module for Laravel applications.",
   "autoload": {
     "psr-4": {
-      "Modules\\Pbac\\": "src/",
-      "Modules\\Pbac\\Tests\\": "tests/"
+      "Pbac\\": "src/",
+      "Pbac\\Tests\\": "tests/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Modules\\Pbac\\Tests\\": "tests/"
+      "Pbac\\Tests\\": "tests/"
     }
   },
   "require": {
@@ -35,7 +35,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Modules\\Pbac\\Providers\\PbacProvider"
+        "Pbac\\Providers\\PbacProvider"
       ]
     }
   },

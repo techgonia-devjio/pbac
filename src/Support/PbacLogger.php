@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pbac\Support;
+namespace Pbac\Support;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;

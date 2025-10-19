@@ -1,22 +1,22 @@
 <?php
 
-namespace Modules\Pbac\Tests\Regression;
+namespace Pbac\Tests\Regression;
 
 use Illuminate\Support\Facades\Config;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Models\PBACAccessTeam;
-use Modules\Pbac\Services\PbacService;
-use Modules\Pbac\Services\PolicyEvaluator;
-use Modules\Pbac\Support\PbacLogger;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\TestCase;
-use Modules\Pbac\Traits\HasPbacAccessControl;
-use Modules\Pbac\Traits\HasPbacGroups;
-use Modules\Pbac\Traits\HasPbacTeams;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Models\PBACAccessTeam;
+use Pbac\Services\PbacService;
+use Pbac\Services\PolicyEvaluator;
+use Pbac\Support\PbacLogger;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\TestCase;
+use Pbac\Traits\HasPbacAccessControl;
+use Pbac\Traits\HasPbacGroups;
+use Pbac\Traits\HasPbacTeams;
 
 /**
  * Regression tests for API stability.
@@ -28,7 +28,7 @@ use Modules\Pbac\Traits\HasPbacTeams;
  */
 class APIStabilityRegressionTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     protected PolicyEvaluator $evaluator;
 

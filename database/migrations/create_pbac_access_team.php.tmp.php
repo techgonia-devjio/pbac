@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::create('pbac_team_user', function (Blueprint $table) {
-            $table->foreignIdFor(\Modules\Pbac\Models\PBACAccessTeam::class, 'pbac_team_id')
+            $table->foreignIdFor(\Pbac\Models\PBACAccessTeam::class, 'pbac_team_id')
                 ->constrained()
                 ->onDelete('cascade');
             $table->foreignId('user_id')

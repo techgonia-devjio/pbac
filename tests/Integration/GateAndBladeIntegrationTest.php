@@ -1,19 +1,19 @@
 <?php
 
-namespace Modules\Pbac\Tests\Integration;
+namespace Pbac\Tests\Integration;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessResource;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Tests\Support\Models\DummyPost;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessResource;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Tests\Support\Models\DummyPost;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\TestCase;
 
 class GateAndBladeIntegrationTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     protected function setUp(): void
     {
@@ -144,7 +144,7 @@ class GateAndBladeIntegrationTest extends TestCase
     public function it_integrates_gate_before_with_non_pbac_users(): void
     {
         // Create a plain user without PBAC trait (using PlainUser model)
-        $plainUser = \Modules\Pbac\Tests\Support\Models\PlainUser::create([
+        $plainUser = \Pbac\Tests\Support\Models\PlainUser::create([
             'name' => 'Plain User',
             'email' => 'plain@example.com',
         ]);
@@ -386,7 +386,7 @@ class GateAndBladeIntegrationTest extends TestCase
         // Verify that Gate::before correctly checks for trait
         // User has trait, so it should proceed to PBAC evaluation
         $this->assertTrue(in_array(
-            \Modules\Pbac\Traits\HasPbacAccessControl::class,
+            \Pbac\Traits\HasPbacAccessControl::class,
             class_uses($user)
         ));
 

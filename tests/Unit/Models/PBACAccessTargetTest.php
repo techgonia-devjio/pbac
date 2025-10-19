@@ -1,14 +1,14 @@
 <?php
 
-namespace Modules\Pbac\Tests\Unit\Models;
+namespace Pbac\Tests\Unit\Models;
 
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Models\PBACAccessTarget;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessTarget;
+use Pbac\Tests\TestCase;
 
 class PBACAccessTargetTest extends TestCase
 {
-    use \Modules\Pbac\Tests\Support\Traits\MigrationLoader;
+    use \Pbac\Tests\Support\Traits\MigrationLoader;
 
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_be_created(): void

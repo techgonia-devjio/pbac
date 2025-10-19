@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Pbac\Traits;
+namespace Pbac\Traits;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Modules\Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessGroup;
 
 trait HasPbacGroups
 {

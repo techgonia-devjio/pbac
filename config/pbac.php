@@ -50,26 +50,26 @@ return [
     'strict_target_registration' => false,
 
     'traits' => [
-        'groups' => \Modules\Pbac\Traits\HasPbacGroups::class,
-        'teams' => \Modules\Pbac\Traits\HasPbacTeams::class,
-        'access_control' => \Modules\Pbac\Traits\HasPbacAccessControl::class
+        'groups' => \Pbac\Traits\HasPbacGroups::class,
+        'teams' => \Pbac\Traits\HasPbacTeams::class,
+        'access_control' => \Pbac\Traits\HasPbacAccessControl::class
     ],
 
 
     'condition_handlers' => [
-        'min_level' => \Modules\Pbac\Support\ConditionerHandlers\MinLevelHandler::class,
-        'allowed_ips' => \Modules\Pbac\Support\ConditionerHandlers\AllowedIpsHandler::class,
-        'requires_attribute_value' => \Modules\Pbac\Support\ConditionerHandlers\RequiresAttributeValueHandler::class,
+        'min_level' => \Pbac\Support\ConditionerHandlers\MinLevelHandler::class,
+        'allowed_ips' => \Pbac\Support\ConditionerHandlers\AllowedIpsHandler::class,
+        'requires_attribute_value' => \Pbac\Support\ConditionerHandlers\RequiresAttributeValueHandler::class,
         // Add your custom condition handlers here, e.g.:
         // 'is_business_hours' => \App\Pbac\Conditions\BusinessHoursHandler::class,
     ],
 
     'models' => [
-        'access_control' => \Modules\Pbac\Models\PBACAccessControl::class,
-        'access_resource' => \Modules\Pbac\Models\PBACAccessResource::class,
-        'access_target' => \Modules\Pbac\Models\PBACAccessTarget::class,
-        'access_group' => \Modules\Pbac\Models\PBACAccessGroup::class,
-        'access_team' => \Modules\Pbac\Models\PBACAccessTeam::class,
+        'access_control' => \Pbac\Models\PBACAccessControl::class,
+        'access_resource' => \Pbac\Models\PBACAccessResource::class,
+        'access_target' => \Pbac\Models\PBACAccessTarget::class,
+        'access_group' => \Pbac\Models\PBACAccessGroup::class,
+        'access_team' => \Pbac\Models\PBACAccessTeam::class,
     ],
 
     'supported_actions' => [

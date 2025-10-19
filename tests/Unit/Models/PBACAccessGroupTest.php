@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Pbac\Tests\Unit\Models;
+namespace Pbac\Tests\Unit\Models;
 
 
-use Modules\Pbac\Models\PBACAccessGroup;
-use Modules\Pbac\Tests\Support\Models\TestUser;
-use Modules\Pbac\Tests\Support\Traits\MigrationLoader;
-use Modules\Pbac\Tests\TestCase;
+use Pbac\Models\PBACAccessGroup;
+use Pbac\Tests\Support\Models\TestUser;
+use Pbac\Tests\Support\Traits\MigrationLoader;
+use Pbac\Tests\TestCase;
 
 class PBACAccessGroupTest extends TestCase
 {

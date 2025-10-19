@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Pbac\Providers;
+namespace Pbac\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
-use Modules\Pbac\Services\PolicyEvaluator;
-use Modules\Pbac\Support\PbacLogger;
+use Pbac\Services\PolicyEvaluator;
+use Pbac\Support\PbacLogger;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;

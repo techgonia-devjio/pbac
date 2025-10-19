@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Pbac\Support\ConditionerHandlers;
+namespace Pbac\Support\ConditionerHandlers;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Pbac\Contracts\ConditionHandlerInterface;
-use Modules\Pbac\Models\PBACAccessControl;
-use Modules\Pbac\Support\PbacLogger;
+use Pbac\Contracts\ConditionHandlerInterface;
+use Pbac\Models\PBACAccessControl;
+use Pbac\Support\PbacLogger;
 
 class AllowedIpsHandler implements ConditionHandlerInterface
 {

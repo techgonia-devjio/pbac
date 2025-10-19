@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Pbac\Tests\Support\Database\Factories;
+namespace Pbac\Tests\Support\Database\Factories;
 
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessGroup;
 
 class PBACAccessGroupFactory extends Factory
 {

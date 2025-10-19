@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Pbac\Commands;
+namespace Pbac\Commands;
 
 use Illuminate\Console\Command;
-use Modules\Pbac\Models\PBACAccessControl; // Import the rule model
-use Modules\Pbac\Models\PBACAccessTarget; // Import Target model
-use Modules\Pbac\Models\PBACAccessResource; // Import Resource model
+use Pbac\Models\PBACAccessControl; // Import the rule model
+use Pbac\Models\PBACAccessTarget; // Import Target model
+use Pbac\Models\PBACAccessResource; // Import Resource model
 use Illuminate\Support\Facades\Validator; // For input validation
 use Illuminate\Support\Facades\Config; // Import Config facade
 

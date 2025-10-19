@@ -25,7 +25,7 @@ Complete API documentation for Laravel PBAC (Policy-Based Access Control).
 
 ### HasPbacAccessControl
 
-**Namespace**: `Modules\Pbac\Traits\HasPbacAccessControl`
+**Namespace**: `Pbac\Traits\HasPbacAccessControl`
 
 Provides permission checking functionality to your User model.
 
@@ -103,7 +103,7 @@ This method is automatically integrated with Laravel's authorization system via 
 
 ### HasPbacGroups
 
-**Namespace**: `Modules\Pbac\Traits\HasPbacGroups`
+**Namespace**: `Pbac\Traits\HasPbacGroups`
 
 Provides group membership functionality to your User model.
 
@@ -174,7 +174,7 @@ foreach ($users as $user) {
 
 ### HasPbacTeams
 
-**Namespace**: `Modules\Pbac\Traits\HasPbacTeams`
+**Namespace**: `Pbac\Traits\HasPbacTeams`
 
 Provides team membership functionality to your User model.
 
@@ -241,7 +241,7 @@ $user = User::with('teams.owner')->find($id);
 
 ### PBACAccessControl
 
-**Namespace**: `Modules\Pbac\Models\PBACAccessControl`  
+**Namespace**: `Pbac\Models\PBACAccessControl`  
 **Table**: `pbac_accesses`
 
 Represents a single access control rule.
@@ -332,7 +332,7 @@ See [Factory Methods](#factory-methods) section below.
 
 ### PBACAccessGroup
 
-**Namespace**: `Modules\Pbac\Models\PBACAccessGroup`  
+**Namespace**: `Pbac\Models\PBACAccessGroup`  
 **Table**: `pbac_access_groups`
 
 Represents a group (collection of users, similar to roles).
@@ -392,7 +392,7 @@ $group = PBACAccessGroup::create([
 ##### Factory
 
 ```php
-use Modules\Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessGroup;
 
 $group = PBACAccessGroup::factory()->create([
     'name' => 'Moderators',
@@ -403,7 +403,7 @@ $group = PBACAccessGroup::factory()->create([
 
 ### PBACAccessTeam
 
-**Namespace**: `Modules\Pbac\Models\PBACAccessTeam`  
+**Namespace**: `Pbac\Models\PBACAccessTeam`  
 **Table**: `pbac_access_teams`
 
 Represents a team (organizational unit for multi-tenancy).
@@ -475,7 +475,7 @@ $team = PBACAccessTeam::create([
 ##### Factory
 
 ```php
-use Modules\Pbac\Models\PBACAccessTeam;
+use Pbac\Models\PBACAccessTeam;
 
 $team = PBACAccessTeam::factory()->create([
     'name' => 'Sales Team',
@@ -487,7 +487,7 @@ $team = PBACAccessTeam::factory()->create([
 
 ### PBACAccessResource
 
-**Namespace**: `Modules\Pbac\Models\PBACAccessResource`  
+**Namespace**: `Pbac\Models\PBACAccessResource`  
 **Table**: `pbac_access_resources`
 
 Represents a resource type (e.g., Post, Document, File).
@@ -530,7 +530,7 @@ $resource = PBACAccessResource::firstOrCreate([
 
 ### PBACAccessTarget
 
-**Namespace**: `Modules\Pbac\Models\PBACAccessTarget`  
+**Namespace**: `Pbac\Models\PBACAccessTarget`  
 **Table**: `pbac_access_targets`
 
 Represents a target type (User, Group, Team).
@@ -885,7 +885,7 @@ $rule = PBACAccessControl::factory()
 #### Example 1: Basic User Permission
 
 ```php
-use Modules\Pbac\Models\PBACAccessControl;
+use Pbac\Models\PBACAccessControl;
 use App\Models\Post;
 
 PBACAccessControl::factory()
@@ -902,7 +902,7 @@ $user->can('view', $post); // true
 #### Example 2: Group Permissions
 
 ```php
-use Modules\Pbac\Models\PBACAccessGroup;
+use Pbac\Models\PBACAccessGroup;
 
 $editors = PBACAccessGroup::create(['name' => 'Editors']);
 $user->groups()->attach($editors->id);
@@ -970,7 +970,7 @@ $user->can('view', $post); // false
 
 ### PolicyEvaluator
 
-**Namespace**: `Modules\Pbac\Services\PolicyEvaluator`
+**Namespace**: `Pbac\Services\PolicyEvaluator`
 
 The core service that evaluates permissions.
 
@@ -1000,7 +1000,7 @@ public function evaluate(
 **Usage**:
 
 ```php
-use Modules\Pbac\Services\PolicyEvaluator;
+use Pbac\Services\PolicyEvaluator;
 
 $evaluator = app(PolicyEvaluator::class);
 

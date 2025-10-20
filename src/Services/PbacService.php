@@ -56,21 +56,21 @@ class PbacService
     /**
      * Create an "allow" rule (fluent interface).
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return \Pbac\Support\RuleBuilder
      */
     public function allow()
     {
-        return PBACAccessControl::factory()->allow();
+        return new \Pbac\Support\RuleBuilder('allow');
     }
 
     /**
      * Create a "deny" rule (fluent interface).
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return \Pbac\Support\RuleBuilder
      */
     public function deny()
     {
-        return PBACAccessControl::factory()->deny();
+        return new \Pbac\Support\RuleBuilder('deny');
     }
 
     /**

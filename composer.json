@@ -1,6 +1,5 @@
 {
   "name": "techgonia/pbac",
-  "version": "0.0.2-alpha.2",
   "type": "library",
   "description": "A powerful Policy-Based Access Control (PBAC) system for Laravel. Combines RBAC, ABAC, and ACL into a unified, fine-grained permission system.",
   "keywords": [

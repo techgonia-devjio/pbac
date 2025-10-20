@@ -54,6 +54,7 @@ class User extends Authenticatable
 
 ```php
 use Pbac\Models\PBACAccessControl;
+use Pbac\Facades\Pbac;
 
 // Grant permission
 PBACAccessControl::factory()
@@ -63,8 +64,20 @@ PBACAccessControl::factory()
     ->withAction('edit')
     ->create();
 
+// Or use the Facade
+Pbac::allow()
+    ->forUser($user)
+    ->forResource(Post::class, $post->id)
+    ->withAction('edit')
+    ->create();
+
 // Check permission
 if ($user->can('edit', $post)) {
+    // User can edit this post
+}
+
+// Or use the Facade
+if (Pbac::can($user, 'edit', $post)) {
     // User can edit this post
 }
 ```
@@ -78,6 +91,7 @@ if ($user->can('edit', $post)) {
 
 ### Usage Guides
 - [Basic Usage](docs/basic-usage.md) - Creating and checking permissions
+- **[Facade Usage](docs/facade-usage.md) - Using the Pbac facade (recommended)**
 - [Use Cases](docs/use-cases.md) - Real-world application patterns and examples
 - [Configuration](docs/configuration.md) - Complete configuration reference
 

@@ -78,8 +78,15 @@ class PbacProvider extends PackageServiceProvider {
         $this->app->singleton(PolicyEvaluator::class, function ($app) {
             return new PolicyEvaluator();
         });
-        $this->app->singleton(\Modules\Pbac\Services\PbacService::class, function ($app) {
-             return new \Modules\Pbac\Services\PbacService($app->make(PolicyEvaluator::class));
+
+        // Bind PbacService as 'pbac' for facade access
+        $this->app->singleton('pbac', function ($app) {
+            return new \Pbac\Services\PbacService($app->make(PolicyEvaluator::class));
+        });
+
+        // Also bind the class name for direct injection
+        $this->app->singleton(\Pbac\Services\PbacService::class, function ($app) {
+            return $app->make('pbac');
         });
     }
 

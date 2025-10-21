@@ -11,7 +11,7 @@ class PBACAccessTeam extends Model
 {
     use HasFactory;
 
-    protected $table = 'pbac_teams';
+    protected $table = 'pbac_access_teams';
 
     protected $fillable = [
         'name',

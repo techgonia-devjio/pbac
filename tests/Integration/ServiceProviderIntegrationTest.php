@@ -94,7 +94,7 @@ class ServiceProviderIntegrationTest extends TestCase
         $this->assertTrue(\Schema::hasTable('pbac_access_targets'));
         $this->assertTrue(\Schema::hasTable('pbac_access_resources'));
         $this->assertTrue(\Schema::hasTable('pbac_access_groups'));
-        $this->assertTrue(\Schema::hasTable('pbac_teams'));
+        $this->assertTrue(\Schema::hasTable('pbac_access_teams'));
         $this->assertTrue(\Schema::hasTable('pbac_accesses'));
         $this->assertTrue(\Schema::hasTable('pbac_group_user'));
         $this->assertTrue(\Schema::hasTable('pbac_team_user'));
@@ -138,13 +138,13 @@ class ServiceProviderIntegrationTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_creates_correct_table_structure_for_teams(): void
     {
-        // Verify pbac_teams table structure
-        $this->assertTrue(\Schema::hasColumn('pbac_teams', 'id'));
-        $this->assertTrue(\Schema::hasColumn('pbac_teams', 'name'));
-        $this->assertTrue(\Schema::hasColumn('pbac_teams', 'description'));
-        $this->assertTrue(\Schema::hasColumn('pbac_teams', 'owner_id'));
-        $this->assertTrue(\Schema::hasColumn('pbac_teams', 'created_at'));
-        $this->assertTrue(\Schema::hasColumn('pbac_teams', 'updated_at'));
+        // Verify pbac_access_teams table structure
+        $this->assertTrue(\Schema::hasColumn('pbac_access_teams', 'id'));
+        $this->assertTrue(\Schema::hasColumn('pbac_access_teams', 'name'));
+        $this->assertTrue(\Schema::hasColumn('pbac_access_teams', 'description'));
+        $this->assertTrue(\Schema::hasColumn('pbac_access_teams', 'owner_id'));
+        $this->assertTrue(\Schema::hasColumn('pbac_access_teams', 'created_at'));
+        $this->assertTrue(\Schema::hasColumn('pbac_access_teams', 'updated_at'));
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

@@ -20,7 +20,7 @@ class PBACAccessTeamTest extends TestCase
             'owner_id' => $owner->id,
         ]);
 
-        $this->assertDatabaseHas('pbac_teams', [
+        $this->assertDatabaseHas('pbac_access_teams', [
             'name' => 'Sales Team',
             'owner_id' => $owner->id,
         ]);
@@ -32,7 +32,7 @@ class PBACAccessTeamTest extends TestCase
         $team = PBACAccessTeam::factory()->create();
         $team->update(['name' => 'Marketing Team']);
 
-        $this->assertDatabaseHas('pbac_teams', [
+        $this->assertDatabaseHas('pbac_access_teams', [
             'id' => $team->id,
             'name' => 'Marketing Team',
         ]);
@@ -44,7 +44,7 @@ class PBACAccessTeamTest extends TestCase
         $team = PBACAccessTeam::factory()->create();
         $team->delete();
 
-        $this->assertDatabaseMissing('pbac_teams', [
+        $this->assertDatabaseMissing('pbac_access_teams', [
             'id' => $team->id,
         ]);
     }
@@ -131,7 +131,7 @@ class PBACAccessTeamTest extends TestCase
         $team->refresh(); // Reload the team to get updated owner_id
 
         $this->assertNull($team->owner_id);
-        $this->assertDatabaseHas('pbac_teams', [
+        $this->assertDatabaseHas('pbac_access_teams', [
             'id' => $team->id,
             'owner_id' => null,
         ]);

@@ -450,7 +450,7 @@ class APIStabilityRegressionTest extends TestCase
         $this->assertTrue(\Schema::hasTable('pbac_access_targets'));
         $this->assertTrue(\Schema::hasTable('pbac_access_resources'));
         $this->assertTrue(\Schema::hasTable('pbac_access_groups'));
-        $this->assertTrue(\Schema::hasTable('pbac_teams'));
+        $this->assertTrue(\Schema::hasTable('pbac_access_teams'));
         $this->assertTrue(\Schema::hasTable('pbac_accesses'));
         $this->assertTrue(\Schema::hasTable('pbac_group_user'));
         $this->assertTrue(\Schema::hasTable('pbac_team_user'));

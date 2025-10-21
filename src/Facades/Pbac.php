@@ -30,6 +30,13 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Support\Collection getAllRules()
  * @method static \Illuminate\Support\Collection getAllGroups()
  * @method static \Illuminate\Support\Collection getAllTeams()
+ * @method static bool isImpersonating()
+ * @method static \Illuminate\Database\Eloquent\Model|null getImpersonator()
+ * @method static int|null getImpersonatorId()
+ * @method static void startImpersonation(\Illuminate\Database\Eloquent\Model $impersonator, \Illuminate\Database\Eloquent\Model $target)
+ * @method static void stopImpersonation()
+ * @method static bool canImpersonate(\Illuminate\Database\Eloquent\Model $user, \Illuminate\Database\Eloquent\Model|int $target)
+ * @method static bool canBeImpersonated(\Illuminate\Database\Eloquent\Model $user)
  *
  * @see \Pbac\Services\PbacService
  */

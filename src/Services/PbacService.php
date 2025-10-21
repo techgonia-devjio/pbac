@@ -385,5 +385,128 @@ class PbacService
     {
         return PBACAccessTeam::all();
     }
+
+    /**
+     * Check if currently impersonating another user.
+     *
+     * @return bool
+     */
+    public function isImpersonating(): bool
+    {
+        $sessionKey = config('pbac-ui.impersonation.session_key', 'pbac_impersonator_id');
+        return session()->has($sessionKey);
+    }
+
+    /**
+     * Get the original user (impersonator).
+     *
+     * @return Model|null
+     */
+    public function getImpersonator(): ?Model
+    {
+        $impersonatorId = $this->getImpersonatorId();
+        if (!$impersonatorId) {
+            return null;
+        }
+
+        $userModel = config('auth.providers.users.model', \App\Models\User::class);
+        return $userModel::find($impersonatorId);
+    }
+
+    /**
+     * Get the impersonator's ID from session.
+     *
+     * @return int|null
+     */
+    public function getImpersonatorId(): ?int
+    {
+        $sessionKey = config('pbac-ui.impersonation.session_key', 'pbac_impersonator_id');
+        return session()->get($sessionKey);
+    }
+
+    /**
+     * Start impersonating another user.
+     *
+     * @param Model $impersonator The user who is impersonating
+     * @param Model $target The user to impersonate
+     * @return void
+     */
+    public function startImpersonation(Model $impersonator, Model $target): void
+    {
+        $sessionKey = config('pbac-ui.impersonation.session_key', 'pbac_impersonator_id');
+        session()->put($sessionKey, $impersonator->getKey());
+
+        $guard = config('pbac-ui.impersonation.guard', null);
+        auth()->guard($guard)->login($target);
+    }
+
+    /**
+     * Stop impersonating and return to original user.
+     *
+     * @return void
+     */
+    public function stopImpersonation(): void
+    {
+        $sessionKey = config('pbac-ui.impersonation.session_key', 'pbac_impersonator_id');
+        $impersonatorId = session()->pull($sessionKey);
+
+        if ($impersonatorId) {
+            $userModel = config('auth.providers.users.model', \App\Models\User::class);
+            $originalUser = $userModel::find($impersonatorId);
+
+            if ($originalUser) {
+                $guard = config('pbac-ui.impersonation.guard', null);
+                auth()->guard($guard)->login($originalUser);
+            }
+        }
+    }
+
+    /**
+     * Check if a user can impersonate another user.
+     *
+     * @param Model $user The user who wants to impersonate
+     * @param Model|int $target The target user or user ID
+     * @return bool
+     */
+    public function canImpersonate(Model $user, Model|int $target): bool
+    {
+        $targetId = $target instanceof Model ? $target->getKey() : $target;
+
+        // Can't impersonate yourself
+        if ($user->getKey() == $targetId) {
+            return false;
+        }
+
+        // Check if user has 'impersonate' permission via PBAC
+        $userModel = get_class($user);
+        return $this->can($user, 'impersonate', $userModel);
+    }
+
+    /**
+     * Check if a user can be impersonated.
+     *
+     * @param Model $user The user to check
+     * @return bool
+     */
+    public function canBeImpersonated(Model $user): bool
+    {
+        // Check exclude roles
+        $excludeRoles = config('pbac-ui.impersonation.exclude_roles', []);
+        if (!empty($excludeRoles) && isset($user->role)) {
+            if (in_array($user->role, $excludeRoles)) {
+                return false;
+            }
+        }
+
+        // Check exclude emails
+        $excludeEmails = config('pbac-ui.impersonation.exclude_emails', []);
+        if (!empty($excludeEmails) && isset($user->email)) {
+            if (in_array($user->email, $excludeEmails)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 

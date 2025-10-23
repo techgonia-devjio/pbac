@@ -13,7 +13,7 @@ class MinLevelHandler {
     {
     }
 
-    public function handle(Model $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context, mixed $conditionValue, PBACAccessControl $rule): bool
+    public function handle(\Illuminate\Foundation\Auth\User $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context, mixed $conditionValue, PBACAccessControl $rule): bool
     {
         if (!isset($context['level'])) {
             $this->logger->debug("Rule ID {$rule->id} requires a 'level', but none was provided in the context.");

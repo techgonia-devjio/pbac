@@ -42,10 +42,10 @@ class RuleBuilder
     /**
      * Set the target to a specific user.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @return $this
      */
-    public function forUser(Model $user): self
+    public function forUser(\Illuminate\Foundation\Auth\User $user): self
     {
         return $this->forTarget(get_class($user), $user->getKey());
     }

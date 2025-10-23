@@ -13,7 +13,7 @@ class AllowedIpsHandler implements ConditionHandlerInterface
     {
     }
 
-    public function handle(Model $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context, mixed $conditionValue, PBACAccessControl $rule): bool
+    public function handle(\Illuminate\Foundation\Auth\User $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context, mixed $conditionValue, PBACAccessControl $rule): bool
     {
         if (!isset($context['ip']) && !isset($context['ip_address'])) {
             $this->logger->debug("Rule ID {$rule->id} requires an IP, but none was provided in the context.");

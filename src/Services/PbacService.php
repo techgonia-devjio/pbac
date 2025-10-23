@@ -28,13 +28,13 @@ class PbacService
     /**
      * Check if a user can perform an action on a resource.
      *
-     * @param Model $user The user to check
+     * @param \Illuminate\Foundation\Auth\User $user The user to check
      * @param string $action The action to perform (view, edit, delete, etc.)
      * @param Model|string|null $resource The resource instance or class name
      * @param array|object|null $context Additional context for condition handlers
      * @return bool
      */
-    public function can(Model $user, string $action, Model|string|null $resource = null, array|object|null $context = null): bool
+    public function can(\Illuminate\Foundation\Auth\User $user, string $action, Model|string|null $resource = null, array|object|null $context = null): bool
     {
         return $this->policyEvaluator->evaluate($user, $action, $resource, $context);
     }
@@ -42,13 +42,13 @@ class PbacService
     /**
      * Check if a user cannot perform an action on a resource.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param string $action
      * @param Model|string|null $resource
      * @param array|object|null $context
      * @return bool
      */
-    public function cannot(Model $user, string $action, Model|string|null $resource = null, array|object|null $context = null): bool
+    public function cannot(\Illuminate\Foundation\Auth\User $user, string $action, Model|string|null $resource = null, array|object|null $context = null): bool
     {
         return !$this->can($user, $action, $resource, $context);
     }
@@ -76,12 +76,12 @@ class PbacService
     /**
      * Get all PBAC rules for a specific user.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param string|null $action Filter by action
      * @param string|null $resource Filter by resource type
      * @return array
      */
-    public function getRulesFor(Model $user, ?string $action = null, ?string $resource = null): array
+    public function getRulesFor(\Illuminate\Foundation\Auth\User $user, ?string $action = null, ?string $resource = null): array
     {
         $groups = $user->groups()->pluck('id')->toArray();
         $teams = method_exists($user, 'teams') ? $user->teams()->pluck('id')->toArray() : [];
@@ -138,10 +138,10 @@ class PbacService
     /**
      * Get all groups a user belongs to.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @return array
      */
-    public function getUserGroups(Model $user): array
+    public function getUserGroups(\Illuminate\Foundation\Auth\User $user): array
     {
         if (!method_exists($user, 'groups')) {
             return [];
@@ -153,10 +153,10 @@ class PbacService
     /**
      * Get all teams a user belongs to.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @return array
      */
-    public function getUserTeams(Model $user): array
+    public function getUserTeams(\Illuminate\Foundation\Auth\User $user): array
     {
         if (!method_exists($user, 'teams')) {
             return [];
@@ -168,10 +168,10 @@ class PbacService
     /**
      * Check if a user is a super admin.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @return bool
      */
-    public function isSuperAdmin(Model $user): bool
+    public function isSuperAdmin(\Illuminate\Foundation\Auth\User $user): bool
     {
         $superAdminAttribute = Config::get('pbac.super_admin_attribute');
         return $superAdminAttribute && ($user->{$superAdminAttribute} ?? false);
@@ -183,7 +183,7 @@ class PbacService
      * @param Model|null $user
      * @return void
      */
-    public function clearCache(?Model $user = null): void
+    public function clearCache(?\Illuminate\Foundation\Auth\User $user = null): void
     {
         if (!Config::get('pbac.cache.enabled', false)) {
             return;
@@ -234,11 +234,11 @@ class PbacService
     /**
      * Assign a user to a group.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param PBACAccessGroup|int $group
      * @return void
      */
-    public function assignToGroup(Model $user, PBACAccessGroup|int $group): void
+    public function assignToGroup(\Illuminate\Foundation\Auth\User $user, PBACAccessGroup|int $group): void
     {
         $groupId = $group instanceof PBACAccessGroup ? $group->id : $group;
 
@@ -250,11 +250,11 @@ class PbacService
     /**
      * Assign a user to a team.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param PBACAccessTeam|int $team
      * @return void
      */
-    public function assignToTeam(Model $user, PBACAccessTeam|int $team): void
+    public function assignToTeam(\Illuminate\Foundation\Auth\User $user, PBACAccessTeam|int $team): void
     {
         $teamId = $team instanceof PBACAccessTeam ? $team->id : $team;
 
@@ -266,11 +266,11 @@ class PbacService
     /**
      * Remove a user from a group.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param PBACAccessGroup|int $group
      * @return void
      */
-    public function removeFromGroup(Model $user, PBACAccessGroup|int $group): void
+    public function removeFromGroup(\Illuminate\Foundation\Auth\User $user, PBACAccessGroup|int $group): void
     {
         $groupId = $group instanceof PBACAccessGroup ? $group->id : $group;
 
@@ -282,11 +282,11 @@ class PbacService
     /**
      * Remove a user from a team.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param PBACAccessTeam|int $team
      * @return void
      */
-    public function removeFromTeam(Model $user, PBACAccessTeam|int $team): void
+    public function removeFromTeam(\Illuminate\Foundation\Auth\User $user, PBACAccessTeam|int $team): void
     {
         $teamId = $team instanceof PBACAccessTeam ? $team->id : $team;
 
@@ -298,11 +298,11 @@ class PbacService
     /**
      * Check if a user belongs to a specific group.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param string|int $group Group name or ID
      * @return bool
      */
-    public function hasGroup(Model $user, string|int $group): bool
+    public function hasGroup(\Illuminate\Foundation\Auth\User $user, string|int $group): bool
     {
         if (!method_exists($user, 'groups')) {
             return false;
@@ -318,11 +318,11 @@ class PbacService
     /**
      * Check if a user belongs to a specific team.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param string|int $team Team name or ID
      * @return bool
      */
-    public function hasTeam(Model $user, string|int $team): bool
+    public function hasTeam(\Illuminate\Foundation\Auth\User $user, string|int $team): bool
     {
         if (!method_exists($user, 'teams')) {
             return false;
@@ -338,11 +338,11 @@ class PbacService
     /**
      * Get all permissions (actions) a user has for a specific resource or globally.
      *
-     * @param Model $user
+     * @param \Illuminate\Foundation\Auth\User $user
      * @param string|null $resource Filter by resource type
      * @return array Array of actions the user can perform
      */
-    public function getPermissionsFor(Model $user, ?string $resource = null): array
+    public function getPermissionsFor(\Illuminate\Foundation\Auth\User $user, ?string $resource = null): array
     {
         $rules = $this->getRulesFor($user, null, $resource);
 
@@ -431,7 +431,7 @@ class PbacService
      * @param Model $target The user to impersonate
      * @return void
      */
-    public function startImpersonation(Model $impersonator, Model $target): void
+    public function startImpersonation(\Illuminate\Foundation\Auth\User $impersonator, Model $target): void
     {
         $sessionKey = config('pbac-ui.impersonation.session_key', 'pbac_impersonator_id');
         session()->put($sessionKey, $impersonator->getKey());
@@ -464,11 +464,11 @@ class PbacService
     /**
      * Check if a user can impersonate another user.
      *
-     * @param Model $user The user who wants to impersonate
+     * @param \Illuminate\Foundation\Auth\User $user The user who wants to impersonate
      * @param Model|int $target The target user or user ID
      * @return bool
      */
-    public function canImpersonate(Model $user, Model|int $target): bool
+    public function canImpersonate(\Illuminate\Foundation\Auth\User $user, Model|int $target): bool
     {
         $targetId = $target instanceof Model ? $target->getKey() : $target;
 
@@ -485,10 +485,10 @@ class PbacService
     /**
      * Check if a user can be impersonated.
      *
-     * @param Model $user The user to check
+     * @param \Illuminate\Foundation\Auth\User $user The user to check
      * @return bool
      */
-    public function canBeImpersonated(Model $user): bool
+    public function canBeImpersonated(\Illuminate\Foundation\Auth\User $user): bool
     {
         // Check exclude roles
         $excludeRoles = config('pbac-ui.impersonation.exclude_roles', []);

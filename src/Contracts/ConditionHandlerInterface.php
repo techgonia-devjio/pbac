@@ -2,7 +2,6 @@
 
 namespace Pbac\Contracts;
 
-use Illuminate\Database\Eloquent\Model;
 use Pbac\Models\PBACAccessControl;
 
 
@@ -10,7 +9,7 @@ interface ConditionHandlerInterface
 {
 
     public function handle(
-        Model $user,
+        \Illuminate\Foundation\Auth\User $user,
         string $action,
         ?string $resourceTypeString,
         ?int $resourceId,

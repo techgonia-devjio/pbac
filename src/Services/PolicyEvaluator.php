@@ -31,13 +31,13 @@ class PolicyEvaluator
     /**
      * Evaluate user access based on action, resource, and context.
      *
-     * @param Model $user The user model requesting access.
+     * @param \Illuminate\Foundation\Auth\User $user The user model requesting access.
      * @param string $action The action being performed (e.g., 'view', 'edit').
      * @param Model|string|null $resource The resource model or its class name, or null if action is not resource-specific.
      * @param array|object|null $context Additional data relevant to the access decision.
      * @return bool
      */
-    public function evaluate(Model $user, string $action, Model|string|null $resource = null, array|object|null $context = null): bool
+    public function evaluate(\Illuminate\Foundation\Auth\User $user, string $action, Model|string|null $resource = null, array|object|null $context = null): bool
     {
         // 1. Validate User Model
         if (!$this->validateUser($user)) {
@@ -94,7 +94,7 @@ class PolicyEvaluator
      * @param  Model  $user
      * @return bool
      */
-    protected function validateUser(Model $user): bool
+    protected function validateUser(\Illuminate\Foundation\Auth\User $user): bool
     {
         if (!in_array(Config::get('pbac.traits.access_control'), class_uses_recursive($user))) {
             $this->logger->error("PBAC Error: User model " . get_class($user) . " does not use the HasPbacAccessControl trait.");
@@ -154,7 +154,7 @@ class PolicyEvaluator
      * @return array An associative array mapping target type strings to an array of their IDs.
      * Example: ['App\Models\User' => [1], 'App\Models\Team' => [5, 10]]
      */
-    protected function determineTargets(Model $user): array
+    protected function determineTargets(\Illuminate\Foundation\Auth\User $user): array
     {
         $targetsByType = [];
         $targetsByType[get_class($user)][] = $user->getKey();
@@ -284,7 +284,7 @@ class PolicyEvaluator
      * @param array|object|null $context Additional context for conditional rule evaluation.
      * @return bool
      */
-    protected function evaluateRules(Model $user, string $action, ?string $resourceTypeString, ?int $resourceId, Collection $matchingRules, array|object|null $context): bool
+    protected function evaluateRules(\Illuminate\Foundation\Auth\User $user, string $action, ?string $resourceTypeString, ?int $resourceId, Collection $matchingRules, array|object|null $context): bool
     {
         // Normalize context to an array if it's null or an object for consistent access
         if (is_object($context) && method_exists($context, 'toArray')) {
@@ -320,14 +320,14 @@ class PolicyEvaluator
      * This method is designed to be extensible for different condition types.
      *
      * @param PBACAccessControl $rule The rule being evaluated.
-     * @param Model $user The user model.
+     * @param \Illuminate\Foundation\Auth\User $user The user model.
      * @param string $action The action being performed.
      * @param string|null $resourceTypeString The resource type string.
      * @param int|null $resourceId The resource ID.
      * @param array $context The contextual data.
      * @return bool True if all the rule's conditions are met.
      */
-    protected function checkRuleConditions(PBACAccessControl $rule, Model $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context): bool
+    protected function checkRuleConditions(PBACAccessControl $rule, \Illuminate\Foundation\Auth\User $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context): bool
     {
         if (empty($rule->extras)) {
             return true;

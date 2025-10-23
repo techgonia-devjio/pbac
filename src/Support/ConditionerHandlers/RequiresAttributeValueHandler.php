@@ -13,7 +13,7 @@ class RequiresAttributeValueHandler implements ConditionHandlerInterface
     {
     }
 
-    public function handle(Model $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context, mixed $conditionValue, PBACAccessControl $rule): bool
+    public function handle(\Illuminate\Foundation\Auth\User $user, string $action, ?string $resourceTypeString, ?int $resourceId, array $context, mixed $conditionValue, PBACAccessControl $rule): bool
     {
         if ($resourceId === null || $resourceTypeString === null) {
             $this->logger->debug("Rule ID {$rule->id} requires a resource, but none was provided for attribute check.");
